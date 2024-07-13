@@ -10,8 +10,31 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Bottom View Animation'),
+          title: const Text('おみくじが出てくるアニメ'),
         ),
+        /*body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    //Navigator.push(
+                      //context,
+                      //MaterialPageRoute(
+                        const BottomViewAnimation();
+                      //),
+                    //);
+                  },
+                  child: const Text(
+                    'おみくじアニメ',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),),
+              ),
+            ],
+          ),
+        ),*/
         body: const BottomViewAnimation(),
       ),
     );
@@ -33,7 +56,7 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with SingleTic
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
       vsync: this,
     );
 
