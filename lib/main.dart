@@ -79,6 +79,8 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with SingleTic
 
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double bottomViewHeight = screenHeight * 4 / 5;
     return Stack(
       children: [
         const Center(child: Text('Main Content')),
@@ -87,9 +89,15 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with SingleTic
           child: SlideTransition(
             position: _offsetAnimation,
             child: Container(
-              height: 200,
+              //height: 200,
+              height: bottomViewHeight,
               color: Colors.blue,
-              child: const Center(child: Text('Bottom View', style: TextStyle(color: Colors.white, fontSize: 20))),
+              child: const Center(
+                  child: Text('Bottom View',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                      ))),
             ),
           ),
         ),
