@@ -8,6 +8,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  animated_text_kit: ^4.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -18,4 +19,5 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/x6.jpg
+    - assets/images/おみくじ箱.png
   #   - images/a_dot_ham.jpeg

@@ -1,7 +1,8 @@
 //import 'dart:ffi';
 
-import 'package:flutter/animation.dart';
+//import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 void main() => runApp(const MyApp());
 
@@ -33,7 +34,7 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   // テキストもアニメーションにする
-  late Animation<double> _textAnimation;
+  //late Animation<double> _textAnimation;
   bool _bottomViewVisible = false;
 
   @override
@@ -52,10 +53,10 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with
       curve: Curves.easeInOut,
     ));
 
-    _textAnimation = CurvedAnimation(
+   /* _textAnimation = CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.0, 1.0, curve: Curves.easeIn),
-    );
+        curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+    );*/
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -96,14 +97,41 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with
         // おみくじアニメボタンを配置
         Align(
           alignment: Alignment.center,
-          child: ElevatedButton(
-              onPressed: _startAnimation,
-              child: const Text(
-                  'おみくじアニメ',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedTextKit(
+                animatedTexts: [
+                  TyperAnimatedText(
+                    '天からのメッセージをお伝えします',
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                    speed: const Duration(microseconds: 200),
+                  ),
+                  TyperAnimatedText(
+                    '愛は与えて忘れなさい',
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                    speed: const Duration(microseconds: 200),
+                  ),
+                ],
+                totalRepeatCount: 1,
               ),
+              ElevatedButton(
+                  onPressed: _startAnimation,
+                  child: const Text(
+                      'おみくじアニメ',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+              ),
+            ],
           ),
         ),
 
@@ -118,10 +146,32 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with
               child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // テキストをアニメーションで表示
                       if (_bottomViewVisible)
-                        AnimatedBuilder(
+                        AnimatedTextKit(
+                            animatedTexts: [
+                              TyperAnimatedText(
+                                  '天からのメッセージをお伝えします',
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                                //speed: const Duration(microseconds: 1000),
+                              ),
+                              TyperAnimatedText(
+                                '愛は与えて忘れなさい',
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                                //speed: const Duration(microseconds: 1000),
+                              ),
+                            ],
+                          totalRepeatCount: 1,
+                        )
+                        /*AnimatedBuilder(
                             animation: _textAnimation,
                             builder: (context, child){
                               final int totalChars = '天からのメッセージをお伝えします'.length;
@@ -135,9 +185,10 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with
                                 ),
                               );
                             },
-                        )
+                        )*/
                       else
                         const Text(
+                            //'天からのメッセージをお伝えします',
                             '',
                           style: TextStyle(
                             color: Colors.white,
@@ -153,7 +204,7 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with
                       const SizedBox(height: 20,),
                       SizedBox(
                         height: bottomViewHeight * 4 / 5,
-                        child: Image.asset('assets/images/x6.jpg'),
+                        child: Image.asset('assets/images/おみくじ箱.png'),
                       ),
                       const Spacer(),
                       ElevatedButton(
