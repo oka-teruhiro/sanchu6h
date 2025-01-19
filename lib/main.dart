@@ -1,8 +1,7 @@
-//import 'dart:ffi';
-
-//import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:sensors_plus/sensors_plus.dart';    // 9
+import 'dart:async';                                // 9
 
 void main() => runApp(const MyApp());
 
@@ -36,6 +35,12 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with
   // テキストもアニメーションにする
   //late Animation<double> _textAnimation;
   bool _bottomViewVisible = false;
+  // シェイク検出、下向き検出
+  StreamSubscription? _accelerometerSubscription; // 9
+  StreamSubscription? _gyroscopeSubscription;     // 9
+  double _lastX = 0.0;                            // 9
+  double _lastY = 0.0;                            // 9
+  double _lastZ = 0.0;                            // 9
 
   @override
   void initState() {
@@ -53,11 +58,6 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with
       curve: Curves.easeInOut,
     ));
 
-   /* _textAnimation = CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
-    );*/
-
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         setState(() {
@@ -69,12 +69,38 @@ class BottomViewAnimationState extends State<BottomViewAnimation> with
         });
       }
     });
+    _startListening(); // 9
     //_controller.forward(); //todo:変更
+  }
+
+  void _startListening() {
+    _accelerometerSubscription =
+        accelerometerEventStream().listen((AccelerometerEvent event) {
+          double deltaX = (event.x - _lastX).abs();
+          double deltaY = (event.y - _lastY).abs();
+          double deltaZ = (event.z - _lastZ).abs();
+
+          if (deltaX > 2 || deltaY > 2 || deltaZ > 2) {
+            _startAnimation();
+          }
+
+          _lastX = event.x;
+          _lastY = event.y;
+          _lastZ = event.z;
+        });
+
+    _gyroscopeSubscription = gyroscopeEventStream().listen((GyroscopeEvent event) {
+      if (event.y > 2) {
+        _reverseAnimation();
+      }
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _accelerometerSubscription?.cancel();
+    _gyroscopeSubscription?.cancel();
     super.dispose();
   }
 
